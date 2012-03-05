@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/boat/Documents/CS3300/HW3/Candy/lib/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="/home/boat/Documents/CS3300/HW3/Candy/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/home/boat/Documents/CS3300/HW3/Candy/lib/mongo-2.7.3.jar"/>
+	<classpathentry kind="lib" path="/home/boat/Documents/CS3300/HW3/Candy/lib/morphia-0.99.jar"/>
+	<classpathentry kind="lib" path="/home/boat/Documents/CS3300/HW3/Candy/lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="lib" path="/home/boat/Documents/CS3300/HW3/Candy/lib/slf4j-log4j12-1.6.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
