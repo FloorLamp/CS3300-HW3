@@ -9,7 +9,7 @@ public class ServerException extends Exception {
 	public static enum ErrorType {
 		CUSTOMER_NOT_FOUND,
 		CANDY_NOT_FOUND,
-		RATING_NOT_IN_RANGE,
+		INVALID_INPUT,
 	}
 
 	private ErrorType error;

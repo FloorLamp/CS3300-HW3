@@ -10,13 +10,14 @@ public class Candy {
 	
 	@Id
 	private ObjectId id;
-	private String candyName;	
+	private String candyName;
 	private float sweetness;
 	private float viscosity;
 	private float sourness;
 	private float nuts;
 	private float texture;
 	private float[] rating;
+	private int purchases;
 	
 	public Candy() { }
 	
@@ -72,5 +73,13 @@ public class Candy {
 
 	public void setRating(float[] rating) {
 		this.rating = rating;
+	}
+
+	public int getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(int purchases) {
+		this.purchases = purchases;
 	}
 }

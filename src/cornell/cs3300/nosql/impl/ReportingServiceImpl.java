@@ -52,7 +52,7 @@ public class ReportingServiceImpl implements ReportingService {
 			throw new ServerException(ErrorType.CANDY_NOT_FOUND, "Candy not found in database");
 		} 
 		if (rating < 0.0f || rating > 1.0f) {
-			throw new ServerException(ErrorType.RATING_NOT_IN_RANGE, "Rating must be between 0 and 1");
+			throw new ServerException(ErrorType.INVALID_INPUT, "Rating must be between 0 and 1");
 		}
 		UpdateOperations<Candy> ops = ds.createUpdateOperations(Candy.class).add("rating", rating);
 		ds.update(candyId, ops);
@@ -60,13 +60,28 @@ public class ReportingServiceImpl implements ReportingService {
 
 	@Override
 	public void purchaseCandy(Key<Customer> userId, Key<Candy> candyId) throws ServerException {
-//		UpdateOperations<Candy> ops = ds.createUpdateOperations(Candy.class).add("rating", rating);
-//		ds.update(candyId, ops);
+		Candy candy = ds.get(Candy.class, candyId.getId());
+		Customer customer = ds.get(Customer.class, userId.getId());
+		if (customer == null) {
+			throw new ServerException(ErrorType.CUSTOMER_NOT_FOUND, "Customer not found in database");
+		}
+		if (candy == null) {
+			throw new ServerException(ErrorType.CANDY_NOT_FOUND, "Candy not found in database");
+		}
+		UpdateOperations<Customer> addCandy = ds.createUpdateOperations(Customer.class).add("purchases", candy.getCandyName());
+		ds.update(customer, addCandy);
+		
+		UpdateOperations<Candy> incPurchases = ds.createUpdateOperations(Candy.class).inc("purchases");
+		ds.update(candy, incPurchases);
 	}
 
 	@Override
 	public String[] getCandyPurchased(Key<Customer> userId) throws ServerException {
-		throw new IllegalStateException("Unimplemented");
+		Customer customer = ds.get(Customer.class, userId.getId());
+		if (customer == null) {
+			throw new ServerException(ErrorType.CUSTOMER_NOT_FOUND, "Customer not found in database");
+		}
+		return customer.getPurchases();
 	}
 
 	@Override
