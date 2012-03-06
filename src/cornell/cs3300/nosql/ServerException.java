@@ -7,9 +7,9 @@ public class ServerException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public static enum ErrorType {
-		/**
-		 * TODO: put your error types here
-		 */
+		CUSTOMER_NOT_FOUND,
+		CANDY_NOT_FOUND,
+		RATING_NOT_IN_RANGE,
 	}
 
 	private ErrorType error;

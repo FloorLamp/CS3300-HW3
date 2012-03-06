@@ -2,32 +2,56 @@ package cornell.cs3300.nosql.pojos;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 
 @Entity
 public class Customer {
 
+	@Id
+	private ObjectId id;
 	private String name;
 	private Date joinDate;
+	private String[] purchases;
+	
+	public Customer() {	}
 	
 	public Customer(String name) {
 		this.name = name;
 		this.joinDate = new Date();
 	}
 	
-	public String getName() {
-		return name;
+	public ObjectId getId() {
+		return id;
 	}
 
-	public Date getJoinDate() {
-		return joinDate;
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Date getJoinDate() {
+		return joinDate;
+	}
 
-	public void setJoinDate(Date joinDate) {
-		this.joinDate = joinDate;
+//	public void setJoinDate(Date joinDate) {
+//		this.joinDate = joinDate;
+//	}
+
+	public String[] getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(String[] purchases) {
+		this.purchases = purchases;
 	}
 }
