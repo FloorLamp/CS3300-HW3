@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.google.code.morphia.Key;
 import com.mongodb.Mongo;
 import cornell.cs3300.nosql.CandyService.CandySortMethod;
+import cornell.cs3300.nosql.ServerException.ErrorType;
 import cornell.cs3300.nosql.impl.CandyServiceImpl;
 import cornell.cs3300.nosql.impl.CustomerServiceImpl;
 import cornell.cs3300.nosql.impl.ReportingServiceImpl;
@@ -46,7 +47,6 @@ public class ReportingTests {
 			fail("Unexpected exception: " + e.toString());
 		}
 
-		System.out.println(ratings[0]);
 		assertNotNull(candies);
 		assertEquals(1, candies.length);
 		assertEquals("Gummy Bears", candies[0].getCandyName());
@@ -63,12 +63,31 @@ public class ReportingTests {
 			fail("Unexpected exception: " + e.toString());
 		}
 		
-		System.out.println(ratings[1]);
 		assertNotNull(candies);
 		assertEquals(1, candies.length);
 		assertEquals("Gummy Bears", candies[0].getCandyName());
 		assertNotNull(ratings);
 		assertEquals(2, ratings.length);
 		assertTrue(ratings[1] == 0.2f);
+		
+		try {			
+			rs.rateCandy(new Key<Customer>("Customer", "badid12345"), candyId, 0.2f);
+		} catch (ServerException e) {
+			assertEquals(e.getErrorType(), ErrorType.CUSTOMER_NOT_FOUND);
+		}
+		
+		try {			
+			Key<Customer> custId = us.addCustomer("Misty");
+			rs.rateCandy(custId, new Key<Candy>("Candy", "badid12345"), 0.2f);
+		} catch (ServerException e) {
+			assertEquals(e.getErrorType(), ErrorType.CANDY_NOT_FOUND);
+		}
+		
+		try {			
+			Key<Customer> custId = us.addCustomer("Team Rocket");
+			rs.rateCandy(custId, candyId, 1.5f);
+		} catch (ServerException e) {
+			assertEquals(e.getErrorType(), ErrorType.RATING_NOT_IN_RANGE);
+		}
 	}	
 }

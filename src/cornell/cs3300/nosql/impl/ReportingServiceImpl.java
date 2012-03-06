@@ -45,11 +45,11 @@ public class ReportingServiceImpl implements ReportingService {
 
 	@Override
 	public void rateCandy(Key<Customer> userId, Key<Candy> candyId, float rating) throws ServerException {
-		if (ds.get(Customer.class, userId) == null) {
-//			throw new ServerException(ErrorType.CUSTOMER_NOT_FOUND, "Customer not found in database");
+		if (ds.get(Customer.class, userId.getId()) == null) {
+			throw new ServerException(ErrorType.CUSTOMER_NOT_FOUND, "Customer not found in database");
 		}
-		if (ds.get(Candy.class, candyId) == null) {
-//			throw new ServerException(ErrorType.CANDY_NOT_FOUND, "Candy not found in database");
+		if (ds.get(Candy.class, candyId.getId()) == null) {
+			throw new ServerException(ErrorType.CANDY_NOT_FOUND, "Candy not found in database");
 		} 
 		if (rating < 0.0f || rating > 1.0f) {
 			throw new ServerException(ErrorType.RATING_NOT_IN_RANGE, "Rating must be between 0 and 1");
