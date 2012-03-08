@@ -15,6 +15,7 @@ public class Customer {
 	private String name;
 	private Date joinDate;
 	private String[] purchases;
+	private int purchaseCount;
 	
 	public Customer() {	}
 	
@@ -53,5 +54,13 @@ public class Customer {
 
 	public void setPurchases(String[] purchases) {
 		this.purchases = purchases;
+	}
+
+	public int getPurchaseCount() {
+		return purchaseCount;
+	}
+
+	public void setPurchaseCount(int purchaseCount) {
+		this.purchaseCount = purchaseCount;
 	}
 }

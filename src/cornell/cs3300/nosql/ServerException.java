@@ -10,6 +10,7 @@ public class ServerException extends Exception {
 		CUSTOMER_NOT_FOUND,
 		CANDY_NOT_FOUND,
 		INVALID_INPUT,
+		NO_CLUSTERS
 	}
 
 	private ErrorType error;

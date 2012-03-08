@@ -17,6 +17,7 @@ public class Candy {
 	private float nuts;
 	private float texture;
 	private float[] rating;
+	private float avgRating;
 	private int purchases;
 	
 	public Candy() { }
@@ -81,5 +82,19 @@ public class Candy {
 
 	public void setPurchases(int purchases) {
 		this.purchases = purchases;
+	}
+
+	public float getAvgRating() {
+		float sum = 0f;
+		for (float f : rating) {
+			sum += f;
+		}
+		this.avgRating = sum / rating.length;
+		return avgRating;
+	}
+	
+	public String toString() {
+		return "candyName " + candyName + ", sweetness " + sweetness 
+				+ ", viscosity " + viscosity + ", sourness " + sourness + ", nuts " + nuts + ", texture " + texture;
 	}
 }
