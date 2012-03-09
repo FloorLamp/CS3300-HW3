@@ -78,4 +78,8 @@ public class ClusterPoint {
 	public void setRating(float rating) {
 		this.rating = rating;
 	}
+	public String toString() {
+		return "sweetness " + sweetness + ", viscosity " + viscosity + ", sourness " 
+				+ sourness + ", nuts " + nuts + ", texture " + texture + ", rating " + rating;
+	}
 }

@@ -1,7 +1,9 @@
 package cornell.cs3300.nosql.impl;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +73,7 @@ public class ReportingServiceImpl implements ReportingService {
 		if (ds.get(Candy.class, candyId.getId()) == null) {
 			log.error("Candy not found");
 			throw new ServerException(ErrorType.CANDY_NOT_FOUND, "Candy not found in database");
-		} 
+		}
 		if (rating < 0.0f || rating > 1.0f) {
 			log.error("Rating invalid");
 			throw new ServerException(ErrorType.INVALID_INPUT, "Rating must be between 0 and 1");
@@ -136,20 +138,28 @@ public class ReportingServiceImpl implements ReportingService {
 		if (iterations <= 0) {
 			log.error("Iterations invalid");
 			throw new ServerException(ErrorType.INVALID_INPUT, "Number of iterations must be at least 1");
-		}		
+		}
 		
 		log.info("Running " + iterations + " clustering iterations with " + numSeeds + " initial seeds, " +
 				"filtering by minimum rating " + minimumRating);
 		
 		// Deletes ClusterCentroid collection to start fresh
-		db.getCollection("ClusterCentroid").remove(new BasicDBObject());
+		db.getCollection(ClusterCentroid.class.getSimpleName()).remove(new BasicDBObject());
 		
 		for (int it = 0; it < iterations; it++) {
 			String params = "";
 			
 			if (ds.find(ClusterCentroid.class).asList().size() == 0) {	// First iteration, use 3 random cluster points
-				List<ClusterPoint> clusters = ds.find(ClusterPoint.class).limit(numSeeds).asList();
-				for (ClusterPoint c : clusters) {
+				List<ClusterPoint> clusters = ds.find(ClusterPoint.class).field("rating").greaterThan(minimumRating).asList();
+				log.info("Found " + clusters.size() + " cluster points to use");
+				
+				Random rand = new Random();
+				List<ClusterPoint> randClusters = new ArrayList<ClusterPoint>(numSeeds);
+				for (int i = 0; i < numSeeds; i++) {
+					randClusters.add(clusters.remove(rand.nextInt(clusters.size())));
+				}
+				for (ClusterPoint c : randClusters) {
+					log.debug("Initial seed: " + c);
 					params += String.format("{ sweetness: %f, viscosity: %f, sourness: %f, nuts: %f, texture: %f },\n",
 						c.getSweetness(), c.getViscosity(), c.getSourness(), c.getNuts(), c.getTexture());
 				}
@@ -196,7 +206,7 @@ public class ReportingServiceImpl implements ReportingService {
 			reduce.append("}\n");
 			reduce.append("return kmean; }");
 	
-			DBCollection inputCollection = db.getCollection("ClusterPoint");	// Use each cluster point as input
+			DBCollection inputCollection = db.getCollection(ClusterPoint.class.getSimpleName());	// Use each cluster point as input
 			OutputType type = MapReduceCommand.OutputType.INLINE;				// Don't write results to db
 			DBObject query = new BasicDBObject("rating", new BasicDBObject("$gt", minimumRating));	
 			MapReduceCommand mr = new MapReduceCommand(inputCollection, map.toString(), reduce.toString(), null, type, query);
