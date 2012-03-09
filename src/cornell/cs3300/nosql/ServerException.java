@@ -10,12 +10,15 @@ public class ServerException extends Exception {
 		CUSTOMER_NOT_FOUND,
 		CANDY_NOT_FOUND,
 		INVALID_INPUT,
-		NO_CLUSTERS
+		NO_CLUSTERS,
+		UNKNOWN_ERROR
 	}
 
 	private ErrorType error;
 
 	public ServerException() {
+		super("Unknown error");
+		this.error = ErrorType.UNKNOWN_ERROR;
 	}
 
 	public ServerException(ErrorType errorType, String message) {
